@@ -33,7 +33,7 @@ public class UI_TalkTextBox : UI_Base
     }
     enum image 
     { 
-        Cursor
+        Cursor,
     }
 
 
@@ -48,15 +48,6 @@ public class UI_TalkTextBox : UI_Base
         Managers.Game.canTalk = false;  //텍스트가 나올땐 대화할 수 없다
         t_m = transform.parent.GetComponent<TalkManager>();
         StartCoroutine(Typing());
-    }
-
-    private void Update()
-    {
-       if (Input.GetKeyDown(KeyCode.X))
-        {
-            delay = 0;
-            noTyping = true;
-        }
     }
 
     IEnumerator Typing()

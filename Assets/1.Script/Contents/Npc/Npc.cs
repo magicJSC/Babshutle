@@ -13,9 +13,9 @@ public class Npc : MonoBehaviour
     public void CheckObj()
     {
         if (id == 1)
-            GetComponent<Red>().ChoiceTalk();
+            GetComponent<Chest>().ChoiceTalk();
         else if (id == 2)
-            GetComponent<White>().ChoiceTalk();
+            GetComponent<StrangeSeed>().ChoiceTalk();
     }
 
     protected virtual void ChoiceTalk()

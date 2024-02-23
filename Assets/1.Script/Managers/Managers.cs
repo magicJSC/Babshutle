@@ -58,5 +58,41 @@ public class Managers : MonoBehaviour
         Instantiate(Resources.Load<GameObject>("Cut/Explain"));
         yield return null;
     }
+
+    IEnumerator Cook()
+    {
+        instance.game.gu.GetComponent<GUController>().agent.speed = 1;
+        yield return null;
+    }
+
+    IEnumerator Get_Key()
+    {
+        instance.data.Get_Key = true;
+        yield return null;
+    }
+
+    IEnumerator Get_Material()
+    {
+        GameObject go = FindAnyObjectByType<Chest>().gameObject;
+        go.GetComponent<Animator>().Play("Open");
+        instance.data.Get_Material = true;
+        yield return null;
+    }
+
+    IEnumerator TalkJam()
+    {
+        instance.data.Talk_Jam = true;
+        yield return null;
+    }
+
+    IEnumerator Clear_Jam()
+    {
+        Destroy(InteractObj);
+        instance.data.Clear_Jam = true;
+        GameObject go = FindAnyObjectByType<Jam>().gameObject;
+        go.SetActive(false);
+        Instantiate(Resources.Load<GameObject>("Cut/Clear_Jam"));
+        yield return null;
+    }
     #endregion
 }

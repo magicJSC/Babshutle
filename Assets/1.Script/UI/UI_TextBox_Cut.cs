@@ -35,18 +35,19 @@ public class UI_TextBox_Cut : UI_Base
     void Start()
     {
         Bind<TextMeshProUGUI>(typeof(TextBox));
+        Bind<Image>(typeof(image));
         speak = GetText((int)TextBox.Speak);
         cursor = GetImage((int)image.Cursor);
         cursor.gameObject.SetActive(false);
+        cut =transform.parent.GetComponent<PlayableDirector>();
         nextSpeak = false;
         StartCoroutine(Typing());
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z) && nextSpeak)
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0)) && nextSpeak)
         {
-            cut.initialTime = initTime;
             cut.Play();
         }
     }
@@ -68,8 +69,6 @@ public class UI_TextBox_Cut : UI_Base
             }
             else if (s == "/")  //끝에 있을때 대화가 끝난다
             {
-                initTime = cut.time;
-                cut.Stop();
                 break;
             }
             else if (s == "<")  //색깔이나 폰트나 글자 크기를 바꿀때 쓰는 꺽쇠
@@ -100,6 +99,9 @@ public class UI_TextBox_Cut : UI_Base
                 yield return new WaitForSeconds(delay);
         }
         nextSpeak = true;
+        initTime = cut.time;
+        cut.Stop();
+        cut.initialTime = initTime;
         cursor.gameObject.SetActive(true);
     }
 }

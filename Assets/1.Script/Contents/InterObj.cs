@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class InterObj : MonoBehaviour
 {
+    [SerializeField] public int repeatIndex; //반복할 대화
+    [HideInInspector]
+    public bool repeatTalk;
+
     [Tooltip("대화가 여러번 할 필요없는 일회용 오브젝트")]
     [Serializable]
     public class Talk

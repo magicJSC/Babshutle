@@ -47,14 +47,15 @@ public class UI_TextBox : UI_Base
         cursor = Get<Image>((int)image.Cursor);
         cursor.gameObject.SetActive(false);
         character = Get<Image>((int)image.Char);
+
         Managers.Game.canTalk = false;  //텍스트가 나올땐 대화할 수 없다
-        talkIndex = 0;
+        talkIndex = inter.repeatTalk ? inter.repeatIndex : 0;
         StartCoroutine(Typing());
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
+        if(Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (Managers.Game.isTalking && endTyping)
             {
@@ -67,17 +68,19 @@ public class UI_TextBox : UI_Base
                 Destroy(gameObject);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.X))
-        {
-            delay = 0;
-        }
     }
 
     IEnumerator Typing()
     {
         string talkData = inter.talks[talkIndex].speak;
         name.text = inter.talks[talkIndex].name;
-        character.sprite = inter.talks[talkIndex].character; 
+        if (inter.talks[talkIndex].character != null)
+        {
+            character.gameObject.SetActive(true);
+            character.sprite = inter.talks[talkIndex].character; 
+        }
+        else
+            character.gameObject.SetActive(false);
         int index = 0;  //티이핑에 필요한 index
         delay = 0.05f;  //보통 딜레이 시간
         speak.text = ""; //대화창 대화 초기화
@@ -95,6 +98,7 @@ public class UI_TextBox : UI_Base
             else if (s == "/")  //끝에 있을때 대화가 끝난다
             {
                 Managers.Game.isTalking = false;
+                inter.repeatTalk = true;
                 break;
             }
             else if (s == "<")  //색깔이나 폰트나 글자 크기를 바꿀때 쓰는 꺽쇠
@@ -125,11 +129,11 @@ public class UI_TextBox : UI_Base
         cursor.gameObject.SetActive(true);
         if (inter.talks[talkIndex].eventName != "")
         {
-
             if (inter.talks[talkIndex].eventObj == null)
                 inter.talks[talkIndex].eventObj = gameObject;
             Managers.instance.SetEvent(inter.talks[talkIndex].eventName, inter.talks[talkIndex].eventObj);
         }
         endTyping = true;
+       
     }
 }

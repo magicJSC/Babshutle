@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     void Start()
     {
+        Managers.Game.player = gameObject;
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         Managers.Game.canTalk = true;
@@ -19,9 +20,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        if (Input.GetKeyDown(KeyCode.Z) && Managers.Game.canTalk)
+        if (!Managers.Game.canTalk)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
             Interact();
+            rigid.velocity = Vector2.zero;
+            anim.SetInteger("H", (int)rigid.velocity.x);
+            anim.SetInteger("V", (int)rigid.velocity.y);
+            return;
+        }
+        Move();
     }
 
     void Move()
@@ -47,9 +57,12 @@ public class PlayerController : MonoBehaviour
 
     void Interact()
     {
-        Collider2D col = Physics2D.OverlapBox(transform.position + interDir,new Vector2(1f,1f),0);
-        if(col.gameObject.layer == 7)
-            CheckObj(col.gameObject);
+        Collider2D[] cols = Physics2D.OverlapBoxAll(transform.position + interDir,new Vector2(1f,2f),0);
+        foreach (Collider2D col in cols)
+        {
+            if (col.gameObject.layer == 7)
+            { CheckObj(col.gameObject); break; }
+        }
     }
 
     void CheckObj(GameObject go)
@@ -67,6 +80,6 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(transform.position + interDir, new Vector2(0.5f, 0.5f));
+        Gizmos.DrawCube(transform.position + interDir, new Vector2(1f, 2f));
     }
 }
