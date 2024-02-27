@@ -34,7 +34,7 @@ public class UI_Choice1 : UI_Base
         e.OnEnter += (PointerEventData evt) => { c1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.yellow; c1.GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Choice")); };
 
         e = c2.GetComponent<UI_EventHandler>();
-        e.OnClick += (PointerEventData evt) => { Destroy(gameObject); };
+        e.OnClick += (PointerEventData evt) => { Instantiate(Resources.Load<GameObject>("Cut/Bad")); Destroy(talk); Destroy(gameObject); };
         e.OnExit += (PointerEventData evt) => { c2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white; };
         e.OnEnter += (PointerEventData evt) => { c2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.yellow; c1.GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Choice")); };
     }

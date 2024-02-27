@@ -22,13 +22,17 @@ public class TalkManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (Managers.Game.isTalking && endTyping)
+            if (Managers.Game.isTalking && endTyping && !Managers.Game.GameOver)
             {
+                GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Click"));
                 transform.GetChild(talkIndex).gameObject.SetActive(false);
                 transform.GetChild(++talkIndex).gameObject.SetActive(true);
             }
             else if (!Managers.Game.isTalking)  //대화 전체가 끝났을때
             {
+                if (transform.GetChild(talkIndex).GetComponent<UI_TalkTextBox>().isChoiceText)
+                    return;
+
                 Managers.Game.canTalk = true;
                 Destroy(gameObject);
             }

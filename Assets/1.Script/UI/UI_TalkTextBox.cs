@@ -11,6 +11,8 @@ public class UI_TalkTextBox : UI_Base
     [SerializeField] string evtName;
     [SerializeField] GameObject evtObj;
 
+    [SerializeField] public bool isChoiceText;
+
     [Header("Texts")]
     TextMeshProUGUI speak;
     TextMeshProUGUI name;
@@ -44,7 +46,8 @@ public class UI_TalkTextBox : UI_Base
         speak = GetText((int)TextBox.Speak);
         name = GetText((int)TextBox.Name);
         cursor = GetImage((int)image.Cursor);
-        cursor.gameObject.SetActive(false);
+        if(cursor != null)
+         cursor.gameObject.SetActive(false);
         Managers.Game.canTalk = false;  //텍스트가 나올땐 대화할 수 없다
         t_m = transform.parent.GetComponent<TalkManager>();
         StartCoroutine(Typing());
@@ -96,17 +99,22 @@ public class UI_TalkTextBox : UI_Base
             }
             else
                 speak.text += s;
+            if (Managers.Game.GameOver)
+                yield break;
+            GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Typing")) ;
             if (!noTyping)
                 yield return new WaitForSeconds(delay);
         }
-
-        cursor.gameObject.SetActive(true);
+        if (cursor != null)
+            cursor.gameObject.SetActive(true);
         if (evtName != "")
         {
             if (evtObj == null)
                 evtObj = gameObject;
             Managers.instance.SetEvent(evtName,evtObj);
         }
-        t_m.endTyping = true;
+
+        if(!isChoiceText)
+         t_m.endTyping = true;
     }
 }

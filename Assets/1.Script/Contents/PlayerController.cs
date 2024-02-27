@@ -15,12 +15,15 @@ public class PlayerController : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         Managers.Game.canTalk = true;
+        Managers.Game.GameOver = false;
+        if (!Managers.Data.Tutorial)
+            transform.position = new Vector2(14.41f, -2.71f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!Managers.Game.canTalk)
+        if (!Managers.Game.canTalk || Managers.Game.GameOver)
             return;
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -61,7 +64,13 @@ public class PlayerController : MonoBehaviour
         foreach (Collider2D col in cols)
         {
             if (col.gameObject.layer == 7)
-            { CheckObj(col.gameObject); break; }
+            {
+                if (Managers.Data.Tutorial && col.GetComponent<Pikachu>() == null)
+                    break;
+
+                CheckObj(col.gameObject);
+                break;
+            }
         }
     }
 
@@ -77,9 +86,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void FootStep()
+    {
+        GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/FootStep"));
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(transform.position + interDir, new Vector2(1f, 2f));
     }
+
+
 }

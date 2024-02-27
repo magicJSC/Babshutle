@@ -16,6 +16,12 @@ public class Npc : MonoBehaviour
             GetComponent<Chest>().ChoiceTalk();
         else if (id == 2)
             GetComponent<StrangeSeed>().ChoiceTalk();
+        else if(id == 3)
+            GetComponent<Pillar>().ChoiceTalk();
+        else if(id == 4)
+            GetComponent<Pot>().ChoiceTalk();
+        else if(id == 5)
+            GetComponent<Pikachu>().ChoiceTalk();
     }
 
     protected virtual void ChoiceTalk()

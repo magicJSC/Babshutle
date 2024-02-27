@@ -46,8 +46,9 @@ public class UI_TextBox_Cut : UI_Base
 
     private void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0)) && nextSpeak)
+        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0)) && nextSpeak && !Managers.Game.GameOver)
         {
+            GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Click"));
             cut.Play();
         }
     }
@@ -95,6 +96,10 @@ public class UI_TextBox_Cut : UI_Base
             }
             else
                 speak.text += s;
+
+            if (Managers.Game.GameOver)
+                yield break;
+            GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Typing"));
             if (!noTyping)
                 yield return new WaitForSeconds(delay);
         }

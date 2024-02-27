@@ -59,7 +59,10 @@ public class UI_TextBox : UI_Base
         {
             if (Managers.Game.isTalking && endTyping)
             {
+                GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Click"));
                 talkIndex++;
+                if (inter.talks[talkIndex].speak == "")
+                    return;
                 StartCoroutine(Typing());
             }
             else if (!Managers.Game.isTalking)
@@ -72,6 +75,7 @@ public class UI_TextBox : UI_Base
 
     IEnumerator Typing()
     {
+        cursor.gameObject.SetActive(false);
         string talkData = inter.talks[talkIndex].speak;
         name.text = inter.talks[talkIndex].name;
         if (inter.talks[talkIndex].character != null)
@@ -122,8 +126,10 @@ public class UI_TextBox : UI_Base
             }
             else
                 speak.text += s;
-            
-            if(!noTyping)
+            if (Managers.Game.GameOver)
+                yield break;
+            GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/Typing"));
+            if (!noTyping)
                 yield return new WaitForSeconds(delay);
         }
         cursor.gameObject.SetActive(true);

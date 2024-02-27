@@ -54,6 +54,8 @@ public class Managers : MonoBehaviour
 
     IEnumerator Explain()
     {
+        instance.data.Tutorial = false;
+        instance.game.canTalk = true;
         Destroy(InteractObj);
         Instantiate(Resources.Load<GameObject>("Cut/Explain"));
         yield return null;
@@ -87,11 +89,46 @@ public class Managers : MonoBehaviour
 
     IEnumerator Clear_Jam()
     {
+        instance.game.canTalk = true;
         Destroy(InteractObj);
         instance.data.Clear_Jam = true;
         GameObject go = FindAnyObjectByType<Jam>().gameObject;
         go.SetActive(false);
+        go = FindAnyObjectByType<Bujeok>().gameObject;
+        go.gameObject.layer = 7;
         Instantiate(Resources.Load<GameObject>("Cut/Clear_Jam"));
+        yield return null;
+    }
+
+    IEnumerator Get_Bujeok()
+    {
+        instance.data.Get_Bujeok = true;
+        Destroy(InteractObj);
+        instance.game.canTalk = true;
+        GameObject go = FindAnyObjectByType<Bujeok>().gameObject;
+        Destroy(go);
+        yield return null;
+    }
+
+    IEnumerator Use_Bujeok()
+    {
+        instance.data.Use_Bujeok = true;
+        GameObject go = FindAnyObjectByType<Pillar>().gameObject;
+        go.GetComponent<Animator>().Play("Rune2");
+        yield return null;
+    }
+
+    IEnumerator Choice2()
+    {
+        GameObject go = Instantiate(Resources.Load<GameObject>("UI/UI_Choice2"));
+        go.GetComponent<UI_Choice2>().talk = InteractObj;
+        yield return null;
+    }
+
+    IEnumerator HappyEnd()
+    {
+        Destroy(InteractObj);
+        Instantiate(Resources.Load<GameObject>("Cut/HappyEnd"));
         yield return null;
     }
     #endregion

@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 
 public class GUController : MonoBehaviour
 {
-    [SerializeField] float curTime;
+    float curTime;
 
     public GameObject target;
     public NavMeshAgent agent;
@@ -18,6 +18,8 @@ public class GUController : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         anim = GetComponent<Animator>();
+        if(Managers.Data.Tutorial)
+            gameObject.SetActive(false);
     }
 
     
@@ -53,12 +55,17 @@ public class GUController : MonoBehaviour
         else 
             curTime += Time.deltaTime;
     }
-
+    void FootStep()
+    {
+        GetComponent<AudioSource>().PlayOneShot(Resources.Load<AudioClip>("Sound/FootStep"));
+    }
     private void OnTriggerEnter2D(Collider2D col)
     {
         if(col.GetComponent<PlayerController>() != null)
         {
             Instantiate(Resources.Load<GameObject>("Cut/GameOver"));
+            Managers.Game.canTalk = false;
+            Managers.Game.GameOver = true;
         }
     }
 }

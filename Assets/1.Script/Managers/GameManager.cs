@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     //대화 내용을 잠시 저장
     //public string talkDetail;
+    public bool GameOver;
 
     public bool isTalking;
 
